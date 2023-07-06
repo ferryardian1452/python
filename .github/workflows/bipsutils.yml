@@ -1,0 +1,16 @@
+name: bipsutils
+on:
+  workflow_dispatch:
+jobs:
+   main:
+    name: main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: rm -r bip*.txt
+      - run: python -m pip install bip_utils > /dev/null 2>&1
+      - run: python bip44.py > bip44-${{ github.run_number }}.txt
+      - run: python bip49.py > bip49-${{ github.run_number }}.txt
+      - run: python bip84.py > bip84-${{ github.run_number }}.txt
+      - run: python bip86.py > bip86-${{ github.run_number }}.txt
+      - run: git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com" && git config --global user.name "${GITHUB_ACTOR}" && git add "*.txt" && git commit -m "Done" && git push
